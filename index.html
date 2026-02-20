@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chris Worley — State Farm SXL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #cc1f3a;
+    --ink: #0f0f0f;
+    --warm: #f5f2ed;
+    --mid: #8a8580;
+    --line: rgba(15,15,15,.10);
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans: 'DM Sans', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { font-size: 16px; scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--warm);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── LAYOUT ── */
+  .page {
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 0 28px 80px;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 0 32px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 64px;
+  }
+  .nav-name {
+    font-family: var(--serif);
+    font-size: 18px;
+    letter-spacing: -.3px;
+    color: var(--ink);
+  }
+  .nav-links {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+  .nav-links a {
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--mid);
+    letter-spacing: .02em;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: var(--ink) !important;
+    border: 1px solid var(--ink);
+    padding: 7px 16px;
+    border-radius: 999px;
+    transition: background .2s, color .2s !important;
+  }
+  .nav-cta:hover { background: var(--ink) !important; color: var(--warm) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    align-items: start;
+    margin-bottom: 88px;
+  }
+  .hero-left { padding-right: 48px; }
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--red);
+    display: block;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(36px, 4.2vw, 54px);
+    line-height: 1.07;
+    letter-spacing: -.5px;
+    color: var(--ink);
+    margin-bottom: 22px;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--red);
+  }
+  .hero-sub {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--mid);
+    max-width: 42ch;
+    font-weight: 300;
+  }
+
+  .hero-right {
+    border-left: 1px solid var(--line);
+    padding-left: 48px;
+    padding-top: 4px;
+  }
+  .stat-row {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .stat {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .stat.visible { opacity: 1; transform: translateY(0); }
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 40px;
+    line-height: 1;
+    color: var(--ink);
+    letter-spacing: -.5px;
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 13px;
+    color: var(--mid);
+    font-weight: 300;
+  }
+  .stat + .stat {
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--line);
+    margin: 0 0 64px;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 32px;
+  }
+
+  /* ── MATCH GRID ── */
+  .match-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-bottom: 64px;
+    overflow: hidden;
+  }
+  .match-cell {
+    background: var(--warm);
+    padding: 28px 30px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity .5s ease, transform .5s ease, background .2s;
+  }
+  .match-cell.visible { opacity: 1; transform: translateY(0); }
+  .match-cell:hover { background: #ede9e3; }
+  .match-need {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 8px;
+  }
+  .match-title {
+    font-family: var(--serif);
+    font-size: 20px;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .match-body {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--mid);
+    font-weight: 300;
+  }
+
+  /* ── QUOTE BLOCK ── */
+  .quote-block {
+    border-left: 3px solid var(--red);
+    padding: 4px 0 4px 28px;
+    margin-bottom: 64px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .quote-block.visible { opacity: 1; transform: translateY(0); }
+  .quote-text {
+    font-family: var(--serif);
+    font-size: clamp(20px, 2.4vw, 27px);
+    line-height: 1.38;
+    color: var(--ink);
+    letter-spacing: -.2px;
+    margin-bottom: 12px;
+  }
+  .quote-attr {
+    font-size: 12px;
+    color: var(--mid);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* ── PROOF ROW ── */
+  .proof-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    margin-bottom: 64px;
+  }
+  .proof-cell {
+    background: var(--warm);
+    padding: 30px 28px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity .5s ease, transform .5s ease;
+  }
+  .proof-cell.visible { opacity: 1; transform: translateY(0); }
+  .proof-icon {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 16px;
+    opacity: .5;
+  }
+  .proof-title {
+    font-family: var(--serif);
+    font-size: 17px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .proof-body {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--mid);
+    font-weight: 300;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-name {
+    font-family: var(--serif);
+    font-size: 15px;
+    color: var(--ink);
+  }
+  .footer-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  .footer-links a {
+    font-size: 13px;
+    color: var(--mid);
+    text-decoration: none;
+    transition: color .2s;
+  }
+  .footer-links a:hover { color: var(--ink); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 720px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-left { padding-right: 0; margin-bottom: 48px; }
+    .hero-right { border-left: none; border-top: 1px solid var(--line); padding-left: 0; padding-top: 32px; }
+    .stat-row { flex-direction: row; flex-wrap: wrap; }
+    .stat + .stat { border-top: none; padding-top: 0; }
+    .match-grid { grid-template-columns: 1fr; }
+    .proof-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-name">Chris Worley</div>
+    <div class="nav-links">
+      <a href="https://cworleyux.com" target="_blank" rel="noreferrer">Portfolio</a>
+      <a href="https://www.linkedin.com/in/wcworley" target="_blank" rel="noreferrer">LinkedIn</a>
+      <a href="mailto:cworleyux@gmail.com" class="nav-cta">cworleyux@gmail.com</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="eyebrow">State Farm &mdash; Senior Experience Lead</div>
+      <h1>I make big orgs<br><em>move faster.</em></h1>
+      <p class="hero-sub">
+        Not by adding process — by removing it. I've led digital modernization at enterprise scale: clearing ownership ambiguity, flattening decision layers, and embedding AI where it actually helps teams ship.
+      </p>
+    </div>
+    <div class="hero-right">
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-num">$2.5B</div>
+          <div class="stat-label">New AUM from Citi's first cross-platform investment product</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">50+</div>
+          <div class="stat-label">Designers led across a global multi-disciplinary team</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">~30%</div>
+          <div class="stat-label">Routine tasks automated through AI-powered workflow design</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">+20%</div>
+          <div class="stat-label">YoY design/engineering velocity via design system governance</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- MATCH GRID -->
+  <div class="section-label">Role fit</div>
+  <div class="match-grid">
+
+    <div class="match-cell">
+      <div class="match-need">SXL Need</div>
+      <div class="match-title">Lead through ambiguity</div>
+      <div class="match-body">State Farm's digital investment is real, but the role is intentionally open. I've done this — building new teams from nothing (Citi Wealth, "win at wealth" mandate) with no blueprint, just the problem to solve.</div>
+    </div>
+
+    <div class="match-cell">
+      <div class="match-need">SXL Need</div>
+      <div class="match-title">Change agent, not passenger</div>
+      <div class="match-body">I don't wait for structure — I create it. Flattening team layers, clarifying ownership, cutting governance that slows things down. The goal is speed through clarity, not more oversight.</div>
+    </div>
+
+    <div class="match-cell">
+      <div class="match-need">SXL Need</div>
+      <div class="match-title">Product + Engineering partnership</div>
+      <div class="match-body">At Citi, experience strategy was co-owned with product — shared OKRs, shared roadmap. Less alignment theater, more actual alignment. I know how to make engineering a partner, not a handoff.</div>
+    </div>
+
+    <div class="match-cell">
+      <div class="match-need">SXL Need</div>
+      <div class="match-title">AI with guardrails</div>
+      <div class="match-body">I've navigated legal, compliance, and AML review in financial services. AI integration isn't just possible in regulated environments — I've done it. The work is governance and adoption design, not just AI features.</div>
+    </div>
+
+    <div class="match-cell">
+      <div class="match-need">SXL Need</div>
+      <div class="match-title">Mobile + digital growth</div>
+      <div class="match-body">Multi-platform, design system-led delivery is how I've always worked — across self-directed brokerage, advisory planning, and servicing. Mobile-first is the default, not an afterthought.</div>
+    </div>
+
+    <div class="match-cell">
+      <div class="match-need">SXL Need</div>
+      <div class="match-title">Executive communication</div>
+      <div class="match-body">Eight years making complex work legible to C-suite at Citi. The insight from the interview resonates: storytelling is often more important than the work itself. I've built that muscle.</div>
+    </div>
+
+  </div>
+
+  <!-- QUOTE -->
+  <div class="quote-block">
+    <div class="quote-text">"What I really enjoy is breaking large challenges into smaller pieces — incremental enough to make progress, bold enough to actually change things."</div>
+    <div class="quote-attr">Chris Worley &mdash; Feb 13 interview</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PROOF ROW -->
+  <div class="section-label">How I work</div>
+  <div class="proof-row">
+
+    <div class="proof-cell">
+      <svg class="proof-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="16" cy="16" r="14" stroke="#0f0f0f" stroke-width="1.5"/>
+        <path d="M10 16h12M16 10v12" stroke="#0f0f0f" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <div class="proof-title">Start with ownership, not output</div>
+      <div class="proof-body">Before solving anything — who decides? Who delivers? Clarity here unlocks everything downstream. I define this early and revisit it when priorities shift.</div>
+    </div>
+
+    <div class="proof-cell">
+      <svg class="proof-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 26L14 10l6 10 4-6 6 8" stroke="#0f0f0f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="proof-title">Ship incrementally, measure honestly</div>
+      <div class="proof-body">I don't believe in big-bang modernization. Ship smaller, learn faster, scale what's working. Momentum matters more than perfection.</div>
+    </div>
+
+    <div class="proof-cell">
+      <svg class="proof-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="6" y="14" width="8" height="12" rx="1.5" stroke="#0f0f0f" stroke-width="1.5"/>
+        <rect x="18" y="8" width="8" height="18" rx="1.5" stroke="#0f0f0f" stroke-width="1.5"/>
+        <path d="M10 14V8M22 8V6" stroke="#0f0f0f" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <div class="proof-title">AI where it earns its place</div>
+      <div class="proof-body">Not AI for show. I embed it into workflows where it saves time, improves quality, or reduces friction — with human review built in from the start.</div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-name">Chris Worley &mdash; Design Director &amp; Change Agent</div>
+    <div class="footer-links">
+      <a href="https://cworleyux.com" target="_blank" rel="noreferrer">cworleyux.com</a>
+      <a href="https://www.linkedin.com/in/wcworley" target="_blank" rel="noreferrer">LinkedIn</a>
+      <a href="tel:3472685161">347.268.5161</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // Staggered reveal on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const siblings = el.parentElement.querySelectorAll('.stat, .match-cell, .proof-cell');
+        siblings.forEach((s, i) => {
+          setTimeout(() => s.classList.add('visible'), i * 80);
+        });
+        el.classList.add('visible');
+        observer.unobserve(el);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.stat, .match-cell, .proof-cell, .quote-block').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
